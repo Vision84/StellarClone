@@ -5,9 +5,39 @@
 		<title>My first three.js app</title>
 		<style>
 			body { margin: 0; }
+			
+			.controls {
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				z-index: 100;
+				display: block;
+			}
+
+			.move-left {
+				padding-left: 20px;
+			}
 		</style>
 	</head>
 	<body>
+
+		<div class="controls">
+			<h1 class="move-left">Controls</h1>
+			<label class="move-left">Gravity</label><br>
+			<input type="range" min="1" max="15" value="1" style="margin-left: 20px;" id="gravity">
+
+			<br><br>
+			<label class="move-left">Diameter</label><br>
+			<input type="range" min="1" max="15" value="1" style="margin-left: 20px;" id="diameter">
+
+			<br><br>
+			<label class="move-left">Radiation</label><br>
+			<input type="range" min="1" max="15" value="1" style="margin-left: 20px;" id="radiation">
+
+			<br><br>
+			<input type="button" value="Evaluate" id="evaluate" style="margin-left: 20px;">
+		</div>
+
 		<script type="module" src="/main.js"></script>
 	</body>
 </html>

@@ -1,6 +1,23 @@
 import * as THREE from 'three';
 
-// Visuals Here
+// factors here
+
+let motionFactor = 5;
+
+const evaluate = document.querySelector("#evaluate");
+
+evaluate.addEventListener("click", (e) => {
+    // gravity
+    const gravitySlider = document.querySelector("#gravity").value - 1;
+    motionFactor = (-4/14)*gravitySlider + 5;
+
+    // diameter
+
+    // radation
+})
+// 1 is 5. 15 should be 1. 
+
+// graphics Here
 const scene = new THREE.Scene();
 scene.background = new THREE.Color( 1, 1, 1 );
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -66,19 +83,29 @@ function degrees_to_radians(degrees)
 
 camera.position.z = 100;
 
+window.addEventListener( 'resize', onWindowResize, false );
+			onWindowResize();
+			
+			function onWindowResize( event )
+			{
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight, true );
+			}
 
 function animate() {
     requestAnimationFrame( animate );
 
-    var time = clock.getElapsedTime();
+    let time = clock.getElapsedTime();
     
     tapeworm.rotation.z = -0.1*Math.cos( 1.9*time );
     tapeworm.position.y = -10.2*Math.cos( 1.9*time );
 
     for( var i = 1; i<=n; i++ )
     {
-        skeleton.bones[i].rotation.x = degrees_to_radians( i*1*Math.cos(0.2*time+i*i) );
-        skeleton.bones[i].rotation.z = degrees_to_radians( i*5*Math.sin(1.9*time-i) );
+        skeleton.bones[i].rotation.x = degrees_to_radians( i*0.2*Math.cos(0.2*time+i*i) );
+        skeleton.bones[i].rotation.z = degrees_to_radians( i*motionFactor*Math.sin(1.9*time-i) ); // modify the 5 in this line to get more constrained wriggling
     }
 
     skeleton.bones[0].rotation.z = degrees_to_radians( 20*Math.cos(1.9/2*time) );
