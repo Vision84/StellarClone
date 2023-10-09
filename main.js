@@ -3,6 +3,7 @@ import * as THREE from 'three';
 // factors here
 
 let motionFactor = 5;
+let diameterFactor = 0.1;
 
 const evaluate = document.querySelector("#evaluate");
 
@@ -12,8 +13,14 @@ evaluate.addEventListener("click", (e) => {
     motionFactor = (-4/14)*gravitySlider + 5;
 
     // diameter
+    const diameterSlider = document.querySelector("#diameter").value - 1;
+    diameterFactor = (0.8/14)*diameterSlider + 0.1;
 
     // radation
+    const radationSlider = document.querySelector("#radiation").value;
+
+    // temperature
+    const temperatureSlider = document.querySelector("#temperature").value;
 })
 // 1 is 5. 15 should be 1. 
 
@@ -42,7 +49,7 @@ let clock = new THREE.Clock( true );
 
 let skeleton = new THREE.Skeleton( bones );
 
-let geometry = new THREE.SphereGeometry(size/2,60,120,0,Math.PI).rotateZ(Math.PI/4).scale(1,0.1,0.1),
+let geometry = new THREE.SphereGeometry(size/2,60,120,0,Math.PI).rotateZ(Math.PI/4).scale(1,0.1,diameterFactor),
 skinIndices = [],
 skinWeights = [];
 
@@ -111,6 +118,30 @@ function animate() {
     skeleton.bones[0].rotation.z = degrees_to_radians( 20*Math.cos(1.9/2*time) );
     skeleton.bones[1].rotation.z = -skeleton.bones[0].rotation.z/2;
     skeleton.bones[2].rotation.z = -skeleton.bones[0].rotation.z/2;
+
+    tapeworm.geometry.dispose();
+    let geometry = new THREE.SphereGeometry(size/2,60,120,0,Math.PI).rotateZ(Math.PI/4).scale(1,0.1,diameterFactor);
+    let pos = geometry.getAttribute( 'position' );
+
+    for(let i = 0; i < pos.count; i++) {
+        let x = pos.getX(i) + size / 2,
+            bone = Math.floor(Math.min(x/boneSize,n)),
+            k = (x/boneSize) % 1;
+
+        let cos = Math.cos(Math.PI*2/3*(k-0.5));
+
+        if (k < 0.5) {
+            skinIndices.push( bone, Math.max(bone-1,0), 0, 0 );
+        }
+        else {
+            skinIndices.push( bone, Math.min(bone+1,n), 0, 0 );
+            skinWeights.push( cos, 1-cos, 0, 0 );
+        }
+    }
+
+    geometry.setAttribute( 'skinIndex', new THREE.Uint16BufferAttribute( skinIndices, 4 ) );
+    geometry.setAttribute( 'skinWeight', new THREE.Float32BufferAttribute( skinWeights, 4 ) );
+    tapeworm.geometry = geometry;
 
     renderer.render( scene, camera );
 }
