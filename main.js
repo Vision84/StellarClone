@@ -9,7 +9,11 @@ let updateGeometry = true;
 
 const evaluate = document.querySelector("#evaluate");
 
-evaluate.addEventListener("click", (e) => {
+$("#sequenceContainer").hide();
+
+$("#evaluate").click(async () => {
+    const url = "";
+    //////////////////////////////SET URL FOR BACKEND
     // gravity
     const gravitySlider = document.querySelector("#gravity").value - 1;
     motionFactor = (-4/14)*gravitySlider + 5;
@@ -24,8 +28,36 @@ evaluate.addEventListener("click", (e) => {
 
     // temperature
     const temperatureSlider = document.querySelector("#temperature").value;
+
+    const data = {
+        grav: gravitySlider,
+        diam: diameterSlider,
+        rad: radiationSlider,
+        temp: temperatureSlider
+    };
+
+    var res = await fetch(url, {
+        method: "POST",
+        mode: "cors", 
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+
+    process(await res.json());
 })
-// 1 is 5. 15 should be 1. 
+
+async function process(params){
+    //do stuff
+}
+
+$("#changeMode").click(() => {
+    $("canvas").toggle();
+    $("#sequenceContainer").toggle();
+})
 
 // graphics Here
 const scene = new THREE.Scene();

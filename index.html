@@ -17,7 +17,17 @@
 			.move-left {
 				padding-left: 20px;
 			}
+
+			#sequenceContainer {
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display: block;
+			}
 		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	</head>
 	<body>
 
@@ -40,8 +50,13 @@
 
 			<br><br>
 			<input type="button" value="Evaluate" id="evaluate" style="margin-left: 20px;">
+			<input type="button" value="Mode" id="changeMode" style="margin-left: 20px;">
 		</div>
 
+		<div id="sequenceContainer">
+			<h1>SEQUENCE</h1>
+		</div>
+		
 		<script type="module" src="/main.js"></script>
 	</body>
 </html>
